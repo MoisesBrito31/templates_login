@@ -113,7 +113,7 @@ export default {
             if(this.podelogar){
                 this.espera = true
                 //this.login()
-                this.csfrGet()
+                //this.csfrGet()
                 }
         },
         async login() {
@@ -137,18 +137,7 @@ export default {
                     throw 'Erro - servidor fora do ar '
                 }
             }).then(result=>{
-                    if(result.indexOf('status:ok')>=0){
-                        var dataArrey = result.split(',')
-                        dataArrey.forEach(ele=> {
-                            if(ele.indexOf('status')<0){
-                                var temp = ele.split(':')
-                                if(ele.indexOf('sessionid'>=0)){
-                                     this.setCookie(temp[0],temp[1],true)
-                                }else{
-                                     this.setCookie(temp[0],temp[1])
-                                }
-                            }
-                        });
+                    if(result.indexOf('ok')>=0){
                         this.logado = true
                         console.log(result)
                         this.$emit('logou',true)
@@ -158,7 +147,7 @@ export default {
                     }else{
                         this.erro = true
                         this.espera=false
-                        throw 'Erro no servidor'
+                        throw "Erro no servidor - ",this.result
                     }  
             }).catch(erro=>{
                 this.erroDetalhes = `--- ${erro}`

@@ -1,29 +1,38 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from '../views/LoginView.vue'
+import Profile from '../views/UserView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/',name: 'Home', component: Home, meta:{'auth': true} },
+  { 
+	path: '/',
+	name: 'Home',
+	component: Home, 
+	meta:{'auth': true}
+  },
   { 
     path: '/user/login',name: 'LoginView', 
-    component: () => import('../views/LoginView.vue'),
+    component: Login,
     meta:{'auth': false}
   },
   {
     path:'/user/profile',name: 'UserView',
-    component: () => import('../views/UserView.vue'),
+    component: Profile,
     meta:{'auth': true}
   },
 ]
 
 const router = new VueRouter({
-  routes
+	mode: "history",
+	base: process.env.BASE_URL,
+	routes
 })
 
 router.beforeEach((to,from,next)=>{
-  var logado = getCookie('userid')
+  var logado = getCookie('logado')
   console.log(logado) 
   if(to.meta.auth && logado==null){
     next('/user/login')

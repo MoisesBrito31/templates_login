@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 from login.models import Usuario
 import json
+import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
@@ -32,7 +33,12 @@ class LogarView(View):
                     inicial = f'{usu.first_name[0]}{usu.last_name[0]}'
                 except:
                     pass
-                ret = f'status:ok,avatar:{usu.avatar.menu},userid:{nome},inicial:{inicial},sessionid:{usu.get_session_auth_hash()}'
+                ret = HttpResponse("ok")
+                ret.set_cookie(
+                    "sessionid",usu.get_session_auth_hash(),
+                    expires=datetime.datetime.now() + datetime.timedelta(days=30),
+                    secure=True)
+                #ret = f'status:ok,avatar:{usu.avatar.menu},userid:{nome},inicial:{inicial},sessionid:{usu.get_session_auth_hash()}'
                 return HttpResponse(ret)
             else:
                 return HttpResponse('usuario')
